@@ -184,7 +184,9 @@ _kcc() {
     local -a contexts
     local desc
     if (( $+commands[yq] )); then
-        desc='yq r $HOME/.kube/$i 'current-context''
+        #desc='yq r $HOME/.kube/$i 'current-context''
+        #desc='yq e '.current-context' $HOME/.kube/$i'
+        desc="grep 'current-context:' \$HOME/.kube/\$i | awk '{print \$2}'"
     else
         desc='$i'
     fi
