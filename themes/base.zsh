@@ -54,6 +54,7 @@ function git_prompt_info() {
 }
 
 ############################################################
+setopt prompt_subst
 # settings
 typeset +H return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%})"
 typeset +H my_gray="$FG[237]"
