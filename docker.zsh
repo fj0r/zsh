@@ -95,7 +95,7 @@ function ipl {
         for i in $*; do
             echo "<-- $i"
             sleep 1
-            skopeo copy docker://$i docker-daemon:$i
+            skopeo copy docker://$i containers-storage:$i
         done
     else
         echo 'use container skopeo'
@@ -104,11 +104,12 @@ function ipl {
             sleep 1
             docker run -it --rm \
                 -v /var/run/docker.sock:/var/run/docker.sock \
+                -v /var/lib/containers:/var/lib/containers \
                 -e http_proxy=$http_proxy \
                 -e https_proxy=$https_proxy \
                 nnurphy/k8su skopeo copy \
                 docker://$i \
-                docker-daemon:$i
+                containers-storage:$i
         done
     fi
 }
