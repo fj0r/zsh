@@ -113,3 +113,17 @@ function ipl {
         done
     fi
 }
+
+function bud {
+    docker run -it --rm \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -v /var/lib/containers:/var/lib/containers \
+        -v $PWD:/world \
+        -e http_proxy=$http_proxy \
+        -e https_proxy=$https_proxy \
+        nnurphy/k8su buildah bud \
+            --pull \
+            -t containers-storage:$1 \
+            -f /world/${2:Dockerfile} /world \
+            && skopeo copy containers-storage:$1 docker-daemon:$1
+}
