@@ -43,9 +43,11 @@ alias r='grep --color=auto'
 alias diff='diff -u'
 alias e='code'
 alias u='curl -v'
-alias t='tmux'
+
+function t {
+    tmux attach -t ${1:-base} || tmux new -s ${1:-base}
+}
 alias tl='tmux list-sessions'
-alias ta='tmux attach -t'
 
 function x {
     export $1=$2
