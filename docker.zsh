@@ -95,7 +95,7 @@ function ipl {
         for i in $*; do
             echo "<-- $i"
             sleep 1
-            skopeo copy docker://$i containers-storage:$i
+            skopeo copy docker://$i docker-daemon:$i
         done
     else
         echo 'use container skopeo'
