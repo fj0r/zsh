@@ -78,7 +78,12 @@ else
     export EDITOR=vi
 fi
 
-alias v=$EDITOR
+if [ -n "$VIMRUNTIME" ]; then
+    alias v=drop
+else
+    alias v=$EDITOR
+fi
+
 export TIME_STYLE=long-iso
 alias n='date +%y%m%d%H%M%S'
 alias now='date -Iseconds'
