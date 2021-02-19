@@ -45,7 +45,8 @@ alias e='code'
 alias u='curl -v'
 
 function t {
-    tmux attach -t ${1:-base} || tmux new -s ${1:-base}
+    local name="$(whoami)@$(hostname)[${1:-}]"
+    tmux attach -t $name || tmux new -s $name
 }
 alias tl='tmux list-sessions'
 
