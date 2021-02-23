@@ -41,7 +41,7 @@ alias df='df -h'
 alias mkdir='mkdir -p'
 alias r='grep --color=auto'
 alias diff='diff -u'
-alias e='code'
+alias l='tail -f'
 alias u='curl -v'
 
 function t {
@@ -81,8 +81,10 @@ fi
 
 if [ -n "$VIMRUNTIME" ]; then
     alias v=drop
+    alias e=drop
 else
     alias v=$EDITOR
+    alias e=$EDITOR
 fi
 
 export TIME_STYLE=long-iso

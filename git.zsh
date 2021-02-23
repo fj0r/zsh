@@ -9,6 +9,7 @@ alias gb='git branch'
 alias gbd='git branch -D'
 alias gpl='git pull'
 alias gps='git push'
+alias gpsf='git push -f'
 function gpsu {
     local default='origin'
     eval $__default_indirect_object
