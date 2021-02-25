@@ -209,16 +209,22 @@ histdb-sync () {
     
     local hist_dir="$(dirname ${HISTDB_FILE})"
     if [[ -d "$hist_dir" ]]; then
-        pushd "$hist_dir"
-        if [[ $(git rev-parse --is-inside-work-tree) != "true" ]] || [[ "$(git rev-parse --show-toplevel)" != "$(pwd -P)" ]]; then
-            git init
-            git config merge.histdb.driver "$(dirname ${HISTDB_INSTALLED_IN})/histdb-merge %O %A %B"
-            echo "$(basename ${HISTDB_FILE}) merge=histdb" | tee -a .gitattributes &>-
-            git add .gitattributes
-            git add "$(basename ${HISTDB_FILE})"
-        fi
-        git commit -am "history" && git pull --no-edit && git push
-        popd
+        () {
+            setopt local_options no_pushd_ignore_dups
+
+            pushd -q "$hist_dir"
+            if [[ $(git rev-parse --is-inside-work-tree) != "true" ]] || [[ "$(git rev-parse --show-toplevel)" != "$(pwd -P)" ]]; then
+                git init
+                git config merge.histdb.driver "$(dirname ${HISTDB_INSTALLED_IN})/histdb-merge %O %A %B"
+                echo "$(basename ${HISTDB_FILE}) merge=histdb" | tee -a .gitattributes &>/dev/null
+                git add .gitattributes
+                git add "$(basename ${HISTDB_FILE})"
+            fi
+            _histdb_stop_sqlite_pipe # Stop in case of a merge, starting again afterwards
+            git commit -am "history" && git pull --no-edit && git push
+            _histdb_start_sqlite_pipe
+            popd -q
+        }
     fi
 
     echo 'pragma wal_checkpoint(passive);' | _histdb_query_batch
@@ -237,6 +243,7 @@ histdb () {
                -in+::=indirs \
                -at+::=atdirs \
                -forget \
+               -yes \
                -detail \
                -sep:- \
                -exact \
@@ -245,7 +252,7 @@ histdb () {
                -from:- -until:- -limit:- \
                -status:- -desc
 
-    local usage="usage:$0 terms [--host] [--in] [--at] [-s n]+* [--from] [--until] [--limit] [--forget] [--sep x] [--detail]
+    local usage="usage:$0 terms [--desc] [--host[ x]] [--in[ x]] [--at] [-s n]+* [-d] [--detail] [--forget] [--yes] [--exact] [--sep x] [--from x] [--until x] [--limit n] [--status x]
     --desc     reverse sort order of results
     --host     print the host column and show all hosts (otherwise current host)
     --host x   find entries from host x
@@ -256,6 +263,7 @@ histdb () {
     -d         debug output query that will be run
     --detail   show details
     --forget   forget everything which matches in the history
+    --yes      don't ask for confirmation when forgetting
     --exact    don't match substrings
     --sep x    print with separator x, and don't tabulate
     --from x   only show commands after date x (sqlite date parser)
@@ -273,6 +281,7 @@ histdb () {
     fi
 
     local forget="0"
+    local forget_accept=0
     local exact=0
 
     if (( ${#hosts} )); then
@@ -380,6 +389,9 @@ histdb () {
             --forget)
                 forget=1
                 ;;
+            --yes)
+                forget_accept=1
+                ;;
             --exact)
                 exact=1
                 ;;
@@ -454,7 +466,7 @@ order by max_start desc) order by max_start ${orderdir}"
             }
         fi
         if [[ $sep == $'\x1f' ]]; then
-            _histdb_query -header -separator $sep "$query" | iconv -f utf-8 -t utf-8 -c | "${HISTDB_TABULATE_CMD[@]}" | buffer
+            _histdb_query -header -separator $sep "$query" | iconv -f utf-8 -t utf-8 -c | buffer | "${HISTDB_TABULATE_CMD[@]}"
         else
             _histdb_query -header -separator $sep "$query" | buffer
         fi
@@ -462,7 +474,11 @@ order by max_start desc) order by max_start ${orderdir}"
     fi
 
     if [[ $forget -gt 0 ]]; then
-        read -q "REPLY?Forget all these results? [y/n] "
+        if [[ $forget_accept -gt 0 ]]; then
+          REPLY=y
+        else
+          read -q "REPLY?Forget all these results? [y/n] "
+        fi
         if [[ $REPLY =~ "[yY]" ]]; then
             _histdb_query "delete from history where
 history.id in (
@@ -475,4 +491,3 @@ where ${where})"
         fi
     fi
 }
-
