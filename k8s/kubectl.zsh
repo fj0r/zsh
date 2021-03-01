@@ -1,6 +1,4 @@
-if (( $+commands[kubectl] )); then
-    __completion_cache kubectl "kubectl completion zsh"
-fi
+__completion_cache kubectl "kubectl completion zsh"
 
 function _gen_kubectl_alias {
     eval "alias kg$1='kubectl get $2'"
@@ -175,11 +173,9 @@ _kcc() {
     local -a contexts
     local desc
     if (( $+commands[yq] )); then
-        #desc='yq r $HOME/.kube/$i 'current-context''
-        #desc='yq e '.current-context' $HOME/.kube/$i'
-        desc="grep 'current-context:' \$HOME/.kube/\$i | awk '{print \$2}'"
+        desc='yq e '.current-context' $HOME/.kube/$i'
     else
-        desc='$i'
+        desc="grep 'current-context:' \$HOME/.kube/\$i | awk '{print \$2}'"
     fi
     for i in $(grep -e '^current-context:.*' -rl $HOME/.kube --exclude-dir="*cache" --exclude="*.log" | sed 's!'"$HOME/.kube/"'!!'); do
         contexts+="${i}:$(eval $desc)"
