@@ -70,6 +70,9 @@ function px { ps aux | grep -i "$*" }
 function p { pgrep -a "$*" }
 __default_indirect_object="local z=\${@: -1} y=\$1 && [[ \$z == \$1 ]] && y=\"\$default\""
 
+function sources {
+	[ -f $1 ] && source $1
+}
 
 if [ -x "$(command -v nvim)" ]; then
     export EDITOR=nvim
