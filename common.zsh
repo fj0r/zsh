@@ -70,8 +70,18 @@ function px { ps aux | grep -i "$*" }
 function p { pgrep -a "$*" }
 __default_indirect_object="local z=\${@: -1} y=\$1 && [[ \$z == \$1 ]] && y=\"\$default\""
 
-function sources {
-	[ -f $1 ] && source $1
+function sources { [ -f $1 ] && source $1 }
+
+function __completion_cache {
+    local __CACHED_COMPLETION_FILE="${HOME}/.zsh_cache/${1}_completion"
+
+    if [[ ! -f $__CACHED_COMPLETION_FILE ]]; then
+        mkdir -p ${HOME}/.zsh_cache
+        eval $2 >! $__CACHED_COMPLETION_FILE
+    fi
+
+    sources $__CACHED_COMPLETION_FILE 
+    #unset __CACHED_COMPLETION_FILE
 }
 
 if [ -x "$(command -v nvim)" ]; then

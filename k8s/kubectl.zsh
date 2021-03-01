@@ -1,14 +1,5 @@
 if (( $+commands[kubectl] )); then
-    __KUBECTL_COMPLETION_FILE="${HOME}/.zsh_cache/kubectl_completion"
-
-    if [[ ! -f $__KUBECTL_COMPLETION_FILE ]]; then
-        mkdir -p ${HOME}/.zsh_cache
-        kubectl completion zsh >! $__KUBECTL_COMPLETION_FILE
-    fi
-
-    [[ -f $__KUBECTL_COMPLETION_FILE ]] && source $__KUBECTL_COMPLETION_FILE
-
-    unset __KUBECTL_COMPLETION_FILE
+    __completion_cache kubectl "kubectl completion zsh"
 fi
 
 function _gen_kubectl_alias {
