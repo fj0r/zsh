@@ -10,8 +10,8 @@ alias dpa="$CRICTL ps -a"
 alias dl="$CRICTL logs -ft"
 alias dpl="$CRICTL pull"
 alias dps="$CRICTL push"
-alias dr="$CRICTL run -i -t --rm -v \$(pwd):/world"
-alias drr="$CRICTL run --rm -v \$(pwd):/world"
+alias dr="$CRICTL run -i -t --rm -v \$PWD:/world"
+alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
 alias dcr="$CRICTL container rm"
 alias dcp="$CRICTL cp"
@@ -63,10 +63,10 @@ compdef _dgcn da dcsr
 
 function dvbk {
     for i in $*
-        $CRICTL run --rm        \
-            -v $(pwd):/backup  \
+        $CRICTL run --rm       \
+            -v $PWD:/backup    \
             -v ${i}:/data      \
-            ubuntu:focal \
+            ubuntu:focal       \
             tar --transform='s/^\.//' -zcvf /backup/vol_${i}_`date +%Y%m%d%H%M%S`.tar.gz -C /data .
 }
 
@@ -77,8 +77,8 @@ compdef _dvlq dvbk
 
 function dvrs {
     $CRICTL volume create $2
-    $CRICTL run --rm            \
-            -v $(pwd):/backup  \
+    $CRICTL run --rm           \
+            -v $PWD:/backup    \
             -v $2:/data        \
             alpine             \
             tar zxvf /backup/$1 -C /data
