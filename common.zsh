@@ -80,7 +80,7 @@ function __completion_cache {
         eval $2 >! $__CACHED_COMPLETION_FILE
     fi
 
-    sources $__CACHED_COMPLETION_FILE 
+    sources $__CACHED_COMPLETION_FILE
     #unset __CACHED_COMPLETION_FILE
 }
 

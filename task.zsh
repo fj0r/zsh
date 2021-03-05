@@ -2,6 +2,7 @@ autoload -U is-at-least
 
 if (( $+commands[inv])); then
     __completion_cache invoke "inv --print-completion-script zsh"
+    alias i='inv'
 fi
 
 if (( $+commands[fab])); then
