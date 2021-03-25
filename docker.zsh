@@ -56,7 +56,7 @@ _dgcn () {
         local name=$(echo $line | awk '{print $2;}')
         dsc+="$name:$rest"
         dsc+="$id:$rest"
-    done <<< $($CRICTL container ls --format '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\t')
+    done <<< $($CRICTL container ls -a --format '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\t')
     _describe containers dsc
 }
 compdef _dgcn da dcsr
