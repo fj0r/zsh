@@ -7,7 +7,7 @@ alias sget='wget -m -k -E -p -np -e robots=off'
 alias aria2rpc='aria2c --max-connection-per-server=8 --min-split-size=10M --enable-rpc --rpc-listen-all=true --rpc-allow-origin-all'
 
 if (( $+commands[ss] )); then
-    alias ns='ss -tulwn'
+    alias ns='ss -tulwnp'
 else
     alias ns="netstat -plnetu"
 fi
