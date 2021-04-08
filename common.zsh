@@ -43,6 +43,7 @@ alias r='grep --color=auto'
 alias diff='diff -u'
 alias l='tail -f'
 alias u='curl -v'
+alias y='ipython3'
 
 function t {
     local name="$(whoami)@$(hostname)[${1:-}]"
