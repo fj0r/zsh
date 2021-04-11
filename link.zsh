@@ -2,7 +2,8 @@ function mm {
     default=":tada:"
     eval $__default_indirect_object
     url=$(cat $HOME/.config/mmhook.url)
-    curl -sS -X POST -H 'Content-Type: application/json' -d "{\"text\": \"$z $y\"}" $url
+    curl -sS -X POST -H 'Content-Type: application/json' $url \
+         -d "{\"text\": \"$z $y\n <${USER}@${HOST}>\"}"
 }
 
 function entf {
