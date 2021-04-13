@@ -1,9 +1,35 @@
 function mm {
-    default=":tada:"
-    eval $__default_indirect_object
-    url=$(cat $HOME/.config/mmhook.url)
-    curl -sS -X POST -H 'Content-Type: application/json' $url \
-         -d "{\"text\": \"$z $y\n <${USER}@${HOST}>\"}"
+    local emoji=":tada:"
+    local channel
+    local url="mmhook"
+    eval set -- $(getopt -o c:e:u: -- "$@")
+    while true; do
+        case "$1" in
+        -c)
+            shift
+            channel=$1
+            ;;
+        -e)
+            shift
+            emoji=$1
+            ;;
+        -u)
+            shift
+            url=$1
+            ;;
+        --)
+            shift
+            break
+            ;;
+        esac
+        shift
+    done
+    if [ ! -z "$channel" ]; then
+        channel=",\"channel\":\"$channel\""
+    fi
+    curl -sS -X POST -H 'Content-Type: application/json' \
+         $(cat $HOME/.config/${url}.url) \
+         -d "{\"text\": \"$1 $emoji\n<${USER}@${HOST}>\"${channel}}"
 }
 
 function entf {
