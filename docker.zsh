@@ -8,6 +8,14 @@ if [ -z "$CRICTL" ]; then
     fi
 fi
 
+if [ -z "$CRICOMPOSE" ]; then
+    if (( $+commands[nerdctl] )); then
+        export CRICOMPOSE="nerdctl compose"
+    else
+        export CRICOMPOSE="docker-compose"
+    fi
+fi
+
 alias d="$CRICTL"
 alias di="$CRICTL images"
 alias drmi="$CRICTL rmi"
@@ -36,10 +44,10 @@ alias dh="$CRICTL history"
 alias dhl="$CRICTL history --no-trunc"
 alias dis="$CRICTL inspect"
 
-alias dc="docker-compose"
-alias dcu="docker-compose up"
-alias dcud="docker-compose up -d"
-alias dcd="docker-compose down"
+alias dc="$CRICOMPOSE"
+alias dcu="$CRICOMPOSE up"
+alias dcud="$CRICOMPOSE up -d"
+alias dcd="$CRICOMPOSE down"
 
 function da {
     if [ $# -gt 1 ]; then
