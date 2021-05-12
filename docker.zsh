@@ -1,5 +1,12 @@
-# $CRICTL | k3s crictl | podman
-export CRICTL=${CRICTL:-docker}
+if [ -z "$CRICTL" ]; then
+    if (( $+commands[nerdctl] )); then
+        export CRICTL=nerdctl
+    elif (( $+commands[podman] )); then
+        export CRICTL=podman
+    else
+        export CRICTL=docker
+    fi
+fi
 
 alias d="$CRICTL"
 alias di="$CRICTL images"
