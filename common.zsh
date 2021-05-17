@@ -94,8 +94,8 @@ else
 fi
 
 if [ -n "$VIMRUNTIME" ]; then
-    alias v=drop
-    alias e=drop
+    alias v=$EDITOR
+    alias e=$EDITOR
 else
     alias v=$EDITOR
     alias e=$EDITOR
