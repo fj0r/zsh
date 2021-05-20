@@ -28,7 +28,7 @@ function toggle-proxy {
     fi
 }
 
-function toggle-git-proxy {
+function toggle-proxy-git {
     if [ -z "$(git config --global --get http.proxy)" ] || [ ! -z $1 ]; then
         local url=${1:-http://localhost:1081}
         echo "set git proxy to $url"
