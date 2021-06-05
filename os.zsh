@@ -28,7 +28,6 @@ else
 fi
 
 if [ -n "$WSL_DISTRO_NAME" ]; then
-  export DISPLAY=${route}:0.0
   #ps# Install-Module -Name BurntToast
   toast () { powershell.exe -command New-BurntToastNotification "-Text '$1'" }
   # export WSLHOME=$(wslpath $(wslvar USERPROFILE))
