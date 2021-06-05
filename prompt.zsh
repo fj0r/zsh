@@ -110,7 +110,7 @@ get_space () {
 }
 
 _1LEFT="$_USERNAME $_PATH"
-_1RIGHT="[%D %T] "
+_1RIGHT="[%D %*] "
 
 prompt_precmd () {
   _1SPACES=`get_space $_1LEFT $_PS1_KUBE $_1RIGHT`
