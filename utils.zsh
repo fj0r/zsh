@@ -15,7 +15,7 @@ fi
 
 function toggle-proxy {
     if [ -z $http_proxy ] || [ ! -z $1 ]; then
-        local url=${1:-http://localhost:1081}
+        local url=${1:-http://localhost:7890}
         echo "set proxy to $url"
         export http_proxy=$url
         export https_proxy=$url
@@ -30,7 +30,7 @@ function toggle-proxy {
 
 function toggle-proxy-git {
     if [ -z "$(git config --global --get http.proxy)" ] || [ ! -z $1 ]; then
-        local url=${1:-http://localhost:1081}
+        local url=${1:-http://localhost:7890}
         echo "set git proxy to $url"
         git config --global http.proxy $url
         git config --global https.proxy $url
