@@ -44,16 +44,13 @@ alias diff='diff -u'
 alias l='tail -f'
 alias u='curl -v'
 alias y='ipython3'
+alias x='export'
 
 function t {
     local name="$(whoami)@$(hostname)[${1:-}]"
     tmux attach -t $name || tmux new -s $name
 }
 alias tl='tmux list-sessions'
-
-function x {
-    export $1=$2
-}
 
 function o {
     echo $(eval "echo \"\$$1\"")
