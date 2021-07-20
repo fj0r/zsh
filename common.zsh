@@ -92,9 +92,11 @@ fi
 
 if [ -n "$VIMRUNTIME" ]; then
     alias v=$EDITOR
+    alias vd="$EDITOR -d"
     alias e=$EDITOR
 else
     alias v=$EDITOR
+    alias vd="$EDITOR -d"
     alias e=$EDITOR
 fi
 
