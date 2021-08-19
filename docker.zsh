@@ -1,11 +1,12 @@
 if [ -z "$CRICTL" ]; then
-    if (( $+commands[podman] )); then
-        export CRICTL=podman
+    if (( $+commands[docker] )); then
+        export CRICTL=docker
+        export CRICOMPOSE="docker-compose"
     elif (( $+commands[nerdctl] )); then
         export CRICTL=nerdctl
         export CRICOMPOSE="nerdctl compose"
     else
-        export CRICTL=docker
+        export CRICTL=podman
         export CRICOMPOSE="docker-compose"
     fi
 fi

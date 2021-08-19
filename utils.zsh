@@ -46,8 +46,6 @@ alias top10='print -l  ${(o)history%% *} | uniq -c | sort -nr | head -n 10'
 
 function timeconv { date -d @$1 +"%Y-%m-%d %T" }
 
-alias sch="grep -rnw '.' --color=auto -e"
-
 function runmd {
     local i
     for i in $*
