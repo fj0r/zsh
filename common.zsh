@@ -82,7 +82,9 @@ function __completion_cache {
     #unset __CACHED_COMPLETION_FILE
 }
 
-if [ -x "$(command -v nvim)" ]; then
+if [ -x "$(command -v hx)" ]; then
+    export EDITOR=hx
+elif [ -x "$(command -v nvim)" ]; then
     export EDITOR=nvim
 elif [ -x "$(command -v vim)" ]; then
     export EDITOR=vim
