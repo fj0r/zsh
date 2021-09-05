@@ -84,6 +84,10 @@ function __completion_cache {
 
 if [ -x "$(command -v hx)" ]; then
     export EDITOR=hx
+    alias h="hx"
+elif [ -x "$(command -v kak)" ]; then
+    export EDITOR=kak
+    alias kk="kak"
 elif [ -x "$(command -v nvim)" ]; then
     export EDITOR=nvim
 elif [ -x "$(command -v vim)" ]; then
@@ -93,12 +97,8 @@ else
 fi
 
 if [ -n "$VIMRUNTIME" ]; then
-    alias v=$EDITOR
-    alias vd="$EDITOR -d"
     alias e=$EDITOR
 else
-    alias v=$EDITOR
-    alias vd="$EDITOR -d"
     alias e=$EDITOR
 fi
 
