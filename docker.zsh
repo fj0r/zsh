@@ -23,7 +23,7 @@ alias dps="$CRICTL push"
 alias dr="$CRICTL run -i -t --rm -v \$PWD:/world"
 alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
-alias dcr="$CRICTL container rm"
+alias dcr="$CRICTL container rm -f"
 alias dcp="$CRICTL cp"
 alias dsp="$CRICTL system prune -f"
 alias dspa="$CRICTL system prune --all --force --volumes"
@@ -50,12 +50,6 @@ function da {
     else
         $CRICTL exec -it $1 /bin/sh -c "[ -e /bin/zsh ] && /bin/zsh || [ -e /bin/bash ] && /bin/bash || /bin/sh"
     fi
-}
-
-function dcsr {
-    local i
-    for i in $*
-        $CRICTL container stop $i && $CRICTL container rm $i
 }
 
 _dgcn () {
