@@ -21,7 +21,7 @@ alias dpa="$CRICTL ps -a"
 alias dl="$CRICTL logs -ft"
 alias dpl="$CRICTL pull"
 alias dps="$CRICTL push"
-alias dr="$CRICTL run ${_docker_options} -it --rm -v \$PWD:/world"
+alias dr="$CRICTL run ${_docker_options} -i -t --rm -v \$PWD:/world"
 alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
 alias dcr="$CRICTL container rm -f"
@@ -47,9 +47,9 @@ alias dcd="$CRICOMPOSE down"
 
 function da {
     if [ $# -gt 1 ]; then
-        $CRICTL exec -it $@
+        $CRICTL exec -i -t $@
     else
-        $CRICTL exec -it $1 /bin/sh -c "[ -e /bin/zsh ] && /bin/zsh || [ -e /bin/bash ] && /bin/bash || /bin/sh"
+        $CRICTL exec -i -t $1 /bin/sh -c "[ -e /bin/zsh ] && /bin/zsh || [ -e /bin/bash ] && /bin/bash || /bin/sh"
     fi
 }
 
@@ -107,7 +107,7 @@ function ipl {
         for i in $*; do
             echo "<-- $i"
             sleep 1
-            docker run -it --rm \
+            docker run -i -t --rm \
                 -v /var/run/docker.sock:/var/run/docker.sock \
                 -v /var/lib/containers:/var/lib/containers \
                 -e http_proxy=$http_proxy \
@@ -120,7 +120,7 @@ function ipl {
 }
 
 function bud {
-    docker run -it --rm \
+    docker run -i -t --rm \
         -v /var/run/docker.sock:/var/run/docker.sock \
         -v /var/lib/containers:/var/lib/containers \
         -v $PWD:/world \
