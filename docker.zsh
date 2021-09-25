@@ -11,6 +11,7 @@ if [ -z "$CRICTL" ]; then
     fi
 fi
 
+_docker_options="--device /dev/fuse --cap-add=SYS_PTRACE --cap-add SYS_ADMIN --security-opt seccomp=unconfined --security-opt apparmor:unconfined"
 alias d="$CRICTL"
 alias di="$CRICTL images"
 alias drmi="$CRICTL rmi"
@@ -20,7 +21,7 @@ alias dpa="$CRICTL ps -a"
 alias dl="$CRICTL logs -ft"
 alias dpl="$CRICTL pull"
 alias dps="$CRICTL push"
-alias dr="$CRICTL run -i -t --rm -v \$PWD:/world"
+alias dr="$CRICTL run ${_docker_options} -it --rm -v \$PWD:/world"
 alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
 alias dcr="$CRICTL container rm -f"
