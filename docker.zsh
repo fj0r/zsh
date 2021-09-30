@@ -11,7 +11,9 @@ if [ -z "$CRICTL" ]; then
     fi
 fi
 
-_docker_options="--device /dev/fuse --cap-add=SYS_PTRACE --cap-add SYS_ADMIN --security-opt seccomp=unconfined --security-opt apparmor:unconfined"
+_docker_debug="--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
+_docker_appimage="--cap-add SYS_ADMIN --device /dev/fuse --security-opt apparmor:unconfined"
+_docker_netadmin="--cap-add=NET_ADMIN --device /dev/net/tun"
 alias d="$CRICTL"
 alias di="$CRICTL images"
 alias drmi="$CRICTL rmi"
@@ -21,7 +23,7 @@ alias dpa="$CRICTL ps -a"
 alias dl="$CRICTL logs -ft"
 alias dpl="$CRICTL pull"
 alias dps="$CRICTL push"
-alias dr="$CRICTL run ${_docker_options} -i -t --rm -v \$PWD:/world"
+alias dr="$CRICTL run ${_docker_debug} ${_docker_appimage} -i -t --rm -v \$PWD:/world"
 alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
 alias dcr="$CRICTL container rm -f"
