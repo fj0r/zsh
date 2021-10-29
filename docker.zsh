@@ -114,7 +114,7 @@ function ipl {
                 -v /var/lib/containers:/var/lib/containers \
                 -e http_proxy=$http_proxy \
                 -e https_proxy=$https_proxy \
-                nnurphy/k8su skopeo copy \
+                fj0rd/0x:k8s skopeo copy \
                 docker://$i \
                 containers-storage:$i
         done
