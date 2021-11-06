@@ -30,6 +30,7 @@ alias ssh-copy-id-with-pwd='ssh-copy-id -o PreferredAuthentications=password -o 
 alias sa='ssh-agent $SHELL'
 alias sad='ssh-add'
 alias rs="rsync -avP"
+alias rsg="rsync -avP --exclude='/.git' --filter=':- .gitignore'"
 
 function s {
     local password="-o IdentitiesOnly=yes "
