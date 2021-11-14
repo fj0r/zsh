@@ -49,6 +49,7 @@ function git_main_branch() {
 
 alias g='git'
 
+alias gpp!='git add --all && git commit -v -a --no-edit --amend && git push --force'
 alias ga='git add'
 alias gaa='git add --all'
 alias gapa='git add --patch'
