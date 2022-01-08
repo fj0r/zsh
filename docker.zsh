@@ -52,10 +52,14 @@ alias dcd="$CRICOMPOSE down"
 
 function da {
     if [ $# -gt 1 ]; then
-        $CRICTL exec -i -t $@
+        $CRICTL exec -it $@
     else
-        $CRICTL exec -i -t $1 /bin/sh -c "[ -e /bin/zsh ] && /bin/zsh || [ -e /bin/bash ] && /bin/bash || /bin/sh"
+        $CRICTL exec -it $1 /bin/sh -c "[ -e /bin/zsh ] && /bin/zsh || [ -e /bin/bash ] && /bin/bash || /bin/sh"
     fi
+}
+
+function dg {
+    dr --pid=container:$1 --net=container:$1 ${2:-io} ${3:-zsh}
 }
 
 _dgcn () {
@@ -69,7 +73,7 @@ _dgcn () {
     done <<< $($CRICTL container ls -a --format '{{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}\t')
     _describe containers dsc
 }
-compdef _dgcn da dcsr
+compdef _dgcn da dg
 
 function dvbk {
     for i in $*
