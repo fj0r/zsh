@@ -14,7 +14,7 @@ else
     typeset -g HISTDB_FILE
 fi
 
-typeset -g HISTDB_INODE=""
+typeset -g HISTDB_INODE=()
 typeset -g HISTDB_SESSION=""
 typeset -g HISTDB_HOST=""
 typeset -g HISTDB_INSTALLED_IN="${(%):-%N}"
@@ -22,7 +22,7 @@ typeset -g HISTDB_INSTALLED_IN="${(%):-%N}"
 
 
 sql_escape () {
-    print -r ${${@//\'/\'\'}//$'\x00'}
+    print -r -- ${${@//\'/\'\'}//$'\x00'}
 }
 
 _histdb_query () {
@@ -208,7 +208,7 @@ histdb-sync () {
     # this ought to apply to other readers?
     echo "truncating WAL"
     echo 'pragma wal_checkpoint(truncate);' | _histdb_query_batch
-
+    
     local hist_dir="${HISTDB_FILE:h}"
     if [[ -d "$hist_dir" ]]; then
         () {
