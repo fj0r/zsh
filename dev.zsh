@@ -23,11 +23,11 @@ usable_port () {
 
 _dx_debug="--cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
 _dx_proxy="-e http_proxy=http://172.17.0.1:7890 -e https_proxy=http://172.17.0.1:7890"
-_dx_sshkey="-e ed25519___\$USER=\"\$(cat \$HOME/.ssh/id_ed25519.pub|awk '{print \$2}')\""
 _dx_port="-p \$(usable_port 2200):22 -p \$(usable_port 5000):5000"
 _dx_id="_\$(date +%m%d%H%M)"
 _dx_dir="\$HOME/.cache"
-alias ox="${_dx_ctl} --rm -it -v \$PWD:/world ${_dx_debug} ${_dx_proxy} ${_dx_sshkey}"
+alias -g dx_sshkey="-e ed25519___$USER=\"$(cat $HOME/.ssh/id_ed25519.pub|awk '{print $2}')\""
+alias ox="${_dx_ctl} --rm -it -v \$PWD:/world ${_dx_debug} ${_dx_proxy}"
 alias ors="ox --name rs${_dx_id} -v ${_dx_dir}/cargo:/opt/cargo ${_dx_port} io:rs zsh"
 alias orsn="ox --name rs${_dx_id} -v ${_dx_dir}/cargo:/opt/cargo ${_dx_port} io:rsn zsh"
 alias ohs="ox --name hs${_dx_id} -v ${_dx_dir}/stack:/opt/stack ${_dx_port} io:hs zsh"
