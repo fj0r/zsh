@@ -52,6 +52,10 @@ function t {
 }
 alias tl='tmux list-sessions'
 
+function xf {
+    export $(cat $1 | xargs)
+}
+
 function o {
     echo $(eval "echo \"\$$1\"")
 }
