@@ -91,9 +91,6 @@ if [ -x "$(command -v nvim)" ]; then
 elif [ -x "$(command -v hx)" ]; then
     export EDITOR=hx
     alias h="hx"
-elif [ -x "$(command -v kak)" ]; then
-    export EDITOR=kak
-    alias kk="kak"
 elif [ -x "$(command -v vim)" ]; then
     export EDITOR=vim
 else

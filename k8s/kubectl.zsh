@@ -14,6 +14,7 @@ function _gen_kubectl_alias {
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
+alias kk='kubectl kustomize'
 alias kg='kubectl get'
 alias ko='kubectl get -o yaml'
 alias kd='kubectl describe'
