@@ -1,40 +1,40 @@
 zmodload zsh/datetime
 
 _command_time_preexec() {
-  timer=${timer:-${$(($EPOCHREALTIME*1000))%.*}}
-  ZSH_COMMAND_TIME_MSG=${ZSH_COMMAND_TIME_MSG-"Time: %s"}
-  ZSH_COMMAND_TIME_COLOR=${ZSH_COMMAND_TIME_COLOR-"white"}
-  export ZSH_COMMAND_TIME=""
+    timer=${timer:-${$(($EPOCHREALTIME*1000))%.*}}
+    ZSH_COMMAND_TIME_MSG=${ZSH_COMMAND_TIME_MSG-"Time: %s"}
+    ZSH_COMMAND_TIME_COLOR=${ZSH_COMMAND_TIME_COLOR-"white"}
+    export ZSH_COMMAND_TIME=""
 }
 
 _command_time_precmd() {
-  if [ $timer ]; then
-    timer_show=$((${$(($EPOCHREALTIME*1000))%.*} - $timer))
-    if [ -n "$TTY" ] && [ $timer_show -ge ${ZSH_COMMAND_TIME_MIN_SECONDS:-3000} ] || [ -n "$timing" ]; then
-      export ZSH_COMMAND_TIME="$timer_show"
-      if [ ! -z ${ZSH_COMMAND_TIME_MSG} ]; then
-        zsh_command_time
-      fi
+    if [ $timer ]; then
+        timer_show=$((${$(($EPOCHREALTIME*1000))%.*} - $timer))
+        if [ -n "$TTY" ] && [ $timer_show -ge ${ZSH_COMMAND_TIME_MIN_SECONDS:-3000} ] || [ -n "$timing" ]; then
+            export ZSH_COMMAND_TIME="$timer_show"
+            if [ ! -z ${ZSH_COMMAND_TIME_MSG} ]; then
+                zsh_command_time
+            fi
+        fi
+        unset timer
     fi
-    unset timer
-  fi
 }
 
 _dot_color="66;66;66"
 get_dot () {
-  local STR=$@
-  local zero='%([BSUbfksu]|([FB]|){*})'
-  local LENGTH=${#${(S%%)STR//$~zero/}}
-  local SPACES=" %{\x1b[38;2;${_dot_color}m%}"
-  (( LENGTH = ${COLUMNS} - $LENGTH))
+    local STR=$@
+    local zero='%([BSUbfksu]|([FB]|){*})'
+    local LENGTH=${#${(S%%)STR//$~zero/}}
+    local SPACES=" %{\x1b[38;2;${_dot_color}m%}"
+    (( LENGTH = ${COLUMNS} - $LENGTH))
 
-  for i in {0..$(($LENGTH - 11))}
+    for i in {0..$(($LENGTH - 11))}
     do
-      SPACES="$SPACES."
+        SPACES="$SPACES."
     done
-  SPACES="$SPACES%{$reset_color%} "
+    SPACES="$SPACES%{$reset_color%} "
 
-  echo $SPACES
+    echo $SPACES
 }
 
 zsh_command_time() {

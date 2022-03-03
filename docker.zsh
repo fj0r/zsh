@@ -135,7 +135,7 @@ function bud {
         -v $PWD:/world \
         -e http_proxy=$http_proxy \
         -e https_proxy=$https_proxy \
-        nnurphy/k8su buildah bud \
+        fj0rd/0x:k8s buildah bud \
             --pull \
             -t containers-storage:$1 \
             -f /world/${2:Dockerfile} /world \

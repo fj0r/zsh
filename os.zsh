@@ -2,29 +2,29 @@
 # Darwin\ *64;Linux\ armv7*;Linux\ aarch64*;Linux\ *64;CYGWIN*\ *64;MINGW*\ *64;MSYS*\ *64
 
 case $(uname -sm) in
-  Darwin\ *64 )
-    alias lns='ln -fs'
-    function af { lsof -p $1 +r 1 &>/dev/null }
-    alias osxattrd='xattr -r -d com.apple.quarantine'
-    alias rmdss='find . -name ".DS_Store" -depth -exec rm {} \;'
-    [[ -x $HOME/.iterm2_shell_integration.zsh ]]  && source $HOME/.iterm2_shell_integration.zsh
-  ;;
-  Linux\ *64 )
-    alias lns='ln -fsr'
-    function af { tail --pid=$1 -f /dev/null }
-    alias drop_caches='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
-  ;;
-  * )
-    alias lns='ln -fsr'
-  ;;
+    Darwin\ *64 )
+        alias lns='ln -fs'
+        function af { lsof -p $1 +r 1 &>/dev/null }
+        alias osxattrd='xattr -r -d com.apple.quarantine'
+        alias rmdss='find . -name ".DS_Store" -depth -exec rm {} \;'
+        [[ -x $HOME/.iterm2_shell_integration.zsh ]]  && source $HOME/.iterm2_shell_integration.zsh
+        ;;
+    Linux\ *64 )
+        alias lns='ln -fsr'
+        function af { tail --pid=$1 -f /dev/null }
+        alias drop_caches='sync; echo 3 | sudo tee /proc/sys/vm/drop_caches'
+        ;;
+    * )
+        alias lns='ln -fsr'
+        ;;
 esac
 
 compdef _kill af
 
 if (( $+commands[ip] )); then
-  export route=$(ip route | awk 'NR==1 {print $3}')
+    export route=$(ip route | awk 'NR==1 {print $3}')
 else
-  export route=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')
+    export route=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')
 fi
 
 if (( $+commands[awesome-client]  )); then
@@ -51,67 +51,58 @@ if (( $+commands[awesome-client]  )); then
 
         # compose the notification
         MESSAGE="naughty.notify({ \
-                title = \"Command completed on: \t\t$DATE\", \
-                text = \"$ $LAST\" .. newline .. \"$RVAL\", \
-                timeout = 0, \
-                screen = 2, \
-                bg = \"$BG_COLOR\", \
-                fg = \"#ffffff\", \
-                margin = 8, \
-                width = 382, \
-                run = function () run_or_raise(nill, { name = \"$LAST\" }) end
-                })"
-        # send it to awesome
-        echo $MESSAGE | awesome-client -
-    }
+            title = \"Command completed on: \t\t$DATE\", \
+            text = \"$ $LAST\" .. newline .. \"$RVAL\", \
+            timeout = 0, \
+            screen = 2, \
+            bg = \"$BG_COLOR\", \
+            fg = \"#ffffff\", \
+            margin = 8, \
+            width = 382, \
+            run = function () run_or_raise(nill, { name = \"$LAST\" }) end
+        })"
+    # send it to awesome
+    echo $MESSAGE | awesome-client -
+}
 fi
 
 if [ -n "$WSL_DISTRO_NAME" ]; then
-  #ps# Install-Module -Name BurntToast
-  toast () { powershell.exe -command New-BurntToastNotification "-Text '$1'" }
-  # export WSLHOME=$(wslpath $(wslvar USERPROFILE))
+    #ps# Install-Module -Name BurntToast
+    toast () { powershell.exe -command New-BurntToastNotification "-Text '$1'" }
+    # export WSLHOME=$(wslpath $(wslvar USERPROFILE))
 fi
 
 function china_mirrors {
-  local b_u="cp /etc/apt/sources.list /etc/apt/sources.list.\$(date +%y%m%d%H%M%S)"
-  local b_a="cp /etc/apk/repositories /etc/apk/repositories.\$(date +%y%m%d%H%M%S)"
-  local s_u="sed -i 's/\(archive\|security\).ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list"
-  local s_d="sed -i 's/\(.*\)\(security\|deb\).debian.org\(.*\)main/\1mirrors.ustc.edu.cn\3main contrib non-free/g' /etc/apt/sources.list"
-  local s_a="sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories"
-  local s=$([ 0 -lt $UID ] && echo sudo)
-  if [ -n "$1" ]; then
-    case $1 in
-      ubuntu )
-        echo $b_u
-        echo $s_u
-      ;;
-      debian )
-        echo $b_u
-        echo $s_d
-      ;;
-      alpine )
-        echo $b_a
-        echo $s_a
-      ;;
-      * )
+    local b_u="cp /etc/apt/sources.list /etc/apt/sources.list.\$(date +%y%m%d%H%M%S)"
+    local b_a="cp /etc/apk/repositories /etc/apk/repositories.\$(date +%y%m%d%H%M%S)"
+    local s_u="sed -i 's/\(archive\|security\).ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list"
+    local s_d="sed -i 's/\(.*\)\(security\|deb\).debian.org\(.*\)main/\1mirrors.ustc.edu.cn\3main contrib non-free/g' /etc/apt/sources.list"
+    local s_a="sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories"
+    local s=$([ 0 -lt $UID ] && echo sudo)
+    local cmd
+    local os
+    if [ -n "$1" ]; then
+        cmd="echo"
+        os="$1"
+    else
+        cmd="$s"
+        os=$(grep ^ID= /etc/os-release | sed 's/ID=\(.*\)/\1/')
+    fi
+    case $os in
+        ubuntu )
+            eval "$cmd $b_u"
+            eval "$cmd $s_u"
+            ;;
+        debian )
+            eval "$cmd $b_u"
+            eval "$cmd $s_d"
+            ;;
+        alpine )
+            eval "$cmd $b_a"
+            eval "$cmd $s_a"
+            ;;
+        * )
     esac
-  else
-    case $(grep ^ID= /etc/os-release | sed 's/ID=\(.*\)/\1/') in
-      ubuntu )
-        eval "$s $b_u"
-        eval "$s $s_u"
-      ;;
-      debian )
-        eval "$s $b_u"
-        eval "$s $s_d"
-      ;;
-      alpine )
-        eval "$s $b_a"
-        eval "$s $s_a"
-      ;;
-      * )
-    esac
-  fi
 }
 
 function make-swapfile {
@@ -121,18 +112,18 @@ function make-swapfile {
     eval set -- "$options"
     while true; do
         case "$1" in
-        -f)
-            shift
-            file=$1
-            ;;
-        -s)
-            shift
-            size=$1
-            ;;
-        --)
-            shift
-            break
-            ;;
+            -f)
+                shift
+                file=$1
+                ;;
+            -s)
+                shift
+                size=$1
+                ;;
+            --)
+                shift
+                break
+                ;;
         esac
         shift
     done

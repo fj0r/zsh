@@ -31,21 +31,21 @@ function gpw {
     eval set -- "$options"
     while true; do
         case "$1" in
-        -c)
-            shift
-            config="$1"
-            ;;
-        -l)
-            shift
-            length="$1"
-            ;;
-        -h)
-            http="true"
-            ;;
-        --)
-            shift
-            break
-            ;;
+            -c)
+                shift
+                config="$1"
+                ;;
+            -l)
+                shift
+                length="$1"
+                ;;
+            -h)
+                http="true"
+                ;;
+            --)
+                shift
+                break
+                ;;
         esac
         shift
     done
@@ -68,7 +68,7 @@ function _comp_gpw {
     case "$state" in
         config)
             _alternative ":config:($(ls -A $PASSWORD_RULE_PATH/rule))"
-        ;;
+            ;;
         item)
             if [ -z ${opt_args[-c]} ]; then
                 name="default"
@@ -77,7 +77,7 @@ function _comp_gpw {
             fi
             local matcher
             _alternative "::($(cat $PASSWORD_RULE_PATH/rule/$name))"
-        ;;
+            ;;
     esac
 }
 
