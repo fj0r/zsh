@@ -50,6 +50,7 @@ alias kdelk='kubectl delete -k'
 
 # Pod management.
 _gen_kubectl_alias p pods
+alias kdelpf='kubectl delete pod --grace-period=0 --force'
 
 # get pod by label: kgpl "app=myapp" -n myns
 alias kgpl='kgp -l'
