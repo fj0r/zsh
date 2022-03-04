@@ -9,7 +9,7 @@ if [[ $(uname -sm) = Darwin\ * ]]; then
     alias readlink="greadlink"
 fi
 
-CFG=${$(readlink -f $ZSHRC)%/*}
+CFG="${$(readlink -f $ZSHRC)%/*}/.."
 
 fpath=($CFG/.zshrc.d/compdef $fpath)
 
