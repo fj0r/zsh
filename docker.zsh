@@ -5,7 +5,7 @@ _docker_netadmin="--cap-add=NET_ADMIN --device /dev/net/tun"
 if [ -z "$CRICTL" ]; then
     if (( $+commands[podman] )); then
         export CRICTL=podman
-        export CRICOMPOSE="podman pod"
+        export CRICOMPOSE="docker-compose"
     elif (( $+commands[nerdctl] )); then
         export CRICTL=nerdctl
         export CRICOMPOSE="nerdctl compose"
