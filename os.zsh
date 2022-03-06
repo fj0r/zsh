@@ -27,11 +27,36 @@ else
     export route=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')
 fi
 
-if (( $+commands[awesome-client]  )); then
-    # send a notification when command completes
+# send a notification when command completes
+if (ps aux | grep kded5 | grep -v grep > /dev/null); then
     function alert {
         RVAL=$?                           # get return value of the last command
-        DATE=`date`                     # get time of completion
+        DATE=`date -Is`                     # get time of completion
+        LAST=$history[$HISTCMD] # get current command
+        LAST=${LAST%[;&|]*}      # remove "; alert" from it
+
+        # set window title so we can get back to it
+        echo -ne "\e]2;$LAST\a"
+
+        LAST=${LAST//\"/'\"'}        # replace " for \" to not break lua format
+
+        # check if the command was successful
+        if [[ $RVAL == 0 ]]; then
+            RVAL="SUCCESS"
+            BG_COLOR="#535d9a"
+        else
+            RVAL="FAILURE"
+            BG_COLOR="#ff2000"
+        fi
+
+        notify-send -a \
+            "$RVAL: $DATE" \
+            "$LAST"
+    }
+else
+    function alert {
+        RVAL=$?                           # get return value of the last command
+        DATE=`date -Is`                     # get time of completion
         LAST=$history[$HISTCMD] # get current command
         LAST=${LAST%[;&|]*}      # remove "; alert" from it
 
@@ -61,9 +86,9 @@ if (( $+commands[awesome-client]  )); then
             width = 382, \
             run = function () run_or_raise(nill, { name = \"$LAST\" }) end
         })"
-    # send it to awesome
-    echo $MESSAGE | awesome-client -
-}
+        # send it to awesome
+        echo $MESSAGE | awesome-client -
+    }
 fi
 
 if [ -n "$WSL_DISTRO_NAME" ]; then
