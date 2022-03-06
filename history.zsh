@@ -20,8 +20,8 @@ setopt PUSHD_IGNORE_DUPS
 #setopt HIST_IGNORE_SPACE
 
 if (( $+commands[sqlite3] )); then
-    source $CFG/.zshrc.d/histdb/sqlite-history.zsh
+    source $CFG/histdb/sqlite-history.zsh
     autoload -Uz add-zsh-hook
-    source $CFG/.zshrc.d/histdb/histdb-interactive.zsh
+    source $CFG/histdb/histdb-interactive.zsh
     bindkey '\C-r' _histdb-isearch
 fi

@@ -9,7 +9,7 @@ if [[ $(uname -sm) = Darwin\ * ]]; then
     alias readlink="greadlink"
 fi
 
-CFG="${$(readlink -f $ZSHRC)%/*}/.."
+CFG=${$(readlink -f $ZSHRC)%/*}
 
 fpath=($CFG/.zshrc.d/compdef $fpath)
 
@@ -21,10 +21,10 @@ fi
     local i
     local t
     local list=()
-    for i in $CFG/.zshrc.d/[^_]*.zsh; do
+    for i in $CFG/[^_]*.zsh; do
         list+=$i
     done
-    [ -f $CFG/.ext.zsh ] && list+=$CFG/.ext.zsh
+    [ -f $CFG/../.ext.zsh ] && list+=$CFG/../.ext.zsh
     for i in $list; do
         t=$EPOCHREALTIME
         source $i
