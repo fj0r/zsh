@@ -21,8 +21,9 @@ usable_port () {
     echo $port
 }
 
+_containers_route=$(eval $_dx_ctl --rm io:latest ip route | awk 'NR==1 {print $3}')
 _dx_debug="--cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
-_dx_proxy="-e http_proxy=http://172.17.0.1:7890 -e https_proxy=http://172.17.0.1:7890"
+_dx_proxy="-e http_proxy=http://${_containers_route}:7890 -e https_proxy=http://${_containers_route}:7890"
 _dx_port="-p \$(usable_port 2200):22 -p \$(usable_port 5000):5000"
 _dx_id="_\$(date +%m%d%H%M)"
 _dx_dir="\$HOME/.cache"
