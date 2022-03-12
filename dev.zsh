@@ -23,6 +23,8 @@ usable_port () {
 
 HOSTADDR=$(hostname -I | awk '{print $1}')
 _dx_debug="--cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
+_docker_appimage="--device /dev/fuse --security-opt apparmor:unconfined"
+_docker_netadmin="--cap-add=NET_ADMIN --device /dev/net/tun"
 _dx_proxy="-e HOSTADDR=$HOSTADDR -e http_proxy=http://${HOSTADDR}:7890 -e https_proxy=http://${HOSTADDR}:7890"
 _dx_port="-p \$(usable_port 2200):22 -p \$(usable_port 5000):5000"
 _dx_id="_\$(date +%m%d%H%M)"

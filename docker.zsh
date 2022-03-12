@@ -1,7 +1,3 @@
-_docker_debug="--cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
-_docker_appimage="--cap-add=SYS_ADMIN --device /dev/fuse"
-_docker_netadmin="--cap-add=NET_ADMIN --device /dev/net/tun"
-
 if [ -z "$CRICTL" ]; then
     if (( $+commands[podman] )); then
         export CRICTL=podman
@@ -9,11 +5,9 @@ if [ -z "$CRICTL" ]; then
     elif (( $+commands[nerdctl] )); then
         export CRICTL=nerdctl
         export CRICOMPOSE="nerdctl compose"
-        _docker_appimage="${_docker_appimage} --security-opt apparmor:unconfined"
     else
         export CRICTL=docker
         export CRICOMPOSE="docker-compose"
-        _docker_appimage="${_docker_appimage} --security-opt apparmor:unconfined"
     fi
 fi
 
@@ -26,7 +20,7 @@ alias dpa="$CRICTL ps -a"
 alias dl="$CRICTL logs -ft"
 alias dpl="$CRICTL pull"
 alias dps="$CRICTL push"
-alias dr="$CRICTL run ${_docker_debug} ${_docker_appimage} -i -t --rm -v \$PWD:/world"
+alias dr="$CRICTL run -i -t --rm -v \$PWD:/world"
 alias drr="$CRICTL run --rm -v \$PWD:/world"
 alias dcs="$CRICTL container stop"
 alias dcr="$CRICTL container rm -f"
