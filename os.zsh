@@ -31,16 +31,15 @@ function notify {
     local title=${2:-$(date -Is)}
     if (ps aux | grep awesome | grep -v grep > /dev/null); then
         # compose the notification
-        MESSAGE="naughty.notify({ \
+        MESSAGE="
+        local naughty = require('naughty')
+        naughty.notify({ \
             title = \"${title}\", \
             text = \"$1\", \
             timeout = 0, \
             screen = 2, \
-            bg = \"$BG_COLOR\", \
-            fg = \"#ffffff\", \
             margin = 8, \
             width = 382, \
-            run = function () run_or_raise(nil, { name = \"$title\" }) end
         })"
         # send it to awesome
         echo $MESSAGE | awesome-client
