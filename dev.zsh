@@ -21,10 +21,9 @@ usable_port () {
     echo $port
 }
 
-#_containers_route=$(eval $_dx_ctl --rm io:latest ip route | awk 'NR==1 {print $3}')
-_containers_route=$(hostname -I | awk '{print $1}')
+HOSTADDR=$(hostname -I | awk '{print $1}')
 _dx_debug="--cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
-_dx_proxy="-e http_proxy=http://${_containers_route}:7890 -e https_proxy=http://${_containers_route}:7890"
+_dx_proxy="-e HOSTADDR=$HOSTADDR -e http_proxy=http://${HOSTADDR}:7890 -e https_proxy=http://${HOSTADDR}:7890"
 _dx_port="-p \$(usable_port 2200):22 -p \$(usable_port 5000):5000"
 _dx_id="_\$(date +%m%d%H%M)"
 _dx_dir="\$HOME/.cache"
@@ -35,10 +34,7 @@ alias orsn="ox --name rs${_dx_id} -v ${_dx_dir}/cargo:/opt/cargo ${_dx_port} io:
 alias ohs="ox --name hs${_dx_id} -v ${_dx_dir}/stack:/opt/stack ${_dx_port} io:hs"
 alias ohsn="ox --name hs${_dx_id} -v ${_dx_dir}/stack:/opt/stack ${_dx_port} io:hsn"
 alias ghci="ox --name hs${_dx_id} -v ${_dx_dir}/stack:/opt/stack ${_dx_port} io:hs stack repl"
-alias _ors="ox -v ${_dx_dir}/cargo:/opt/cache io:rs zsh"
-alias _ohs="ox -v ${_dx_dir}/stack:/opt/cache io:hs zsh"
 alias ogo="ox --name go${_dx_id} -v ${_dx_dir}/gopkg:/opt/gopkg ${_dx_port} io:go"
-alias _ogo="ox -v ${_dx_id}/gopkg:/opt/cache io:go zsh"
 alias opy="ox --name py${_dx_id} -p \$(usable_port 8888):8888 io:torch"
 alias ojpl="ox --name jpl${_dx_id} -p \$(usable_port 8888):8888 io:jpl"
 alias ong="ox --name ng${_dx_id} -v ${_dx_dir}/ng:/srv -p \$(usable_port 8080):80 ${_dx_port} ng"
