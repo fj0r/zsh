@@ -21,7 +21,7 @@ usable_port () {
     echo $port
 }
 
-HOSTADDR=$(hostname -I | awk '{print $1}')
+HOSTADDR=${HOSTADDR:-$(hostname -I | awk '{print $1}')}
 _dx_debug="--cap-add=SYS_ADMIN --cap-add=SYS_PTRACE --security-opt seccomp=unconfined"
 _docker_appimage="--device /dev/fuse --security-opt apparmor:unconfined"
 _docker_netadmin="--cap-add=NET_ADMIN --device /dev/net/tun"
