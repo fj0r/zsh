@@ -45,6 +45,7 @@ function notify {
             width = 382, \
             border_color = \"${color[$ug]}\",
             border_width = 2,
+            screen = 1,
         })"
         # send it to awesome
         echo $MESSAGE | awesome-client
