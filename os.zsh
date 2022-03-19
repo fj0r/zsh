@@ -28,23 +28,29 @@ else
 fi
 
 function notify {
-    local title=${2:-$(date -Is)}
+    local ug=${2:-2}
+    local title=${3:-$(date -Is)}
+
     if (ps aux | grep awesome | grep -v grep > /dev/null); then
+        local color=("#5684ae" "#048243" "#d9544d")
+        local timeout=(5 30 0)
         # compose the notification
         MESSAGE="
         local naughty = require('naughty')
         naughty.notify({ \
             title = \"${title}\", \
             text = \"$1\", \
-            timeout = 0, \
-            screen = 2, \
+            timeout = ${timeout[$ug]}, \
             margin = 8, \
             width = 382, \
+            border_color = \"${color[$ug]}\",
+            border_width = 2,
         })"
         # send it to awesome
         echo $MESSAGE | awesome-client
     else
-        notify-send -a "${title}" "$1"
+        local urgency=(low normal critical)
+        notify-send -u "${urgency[$ug]}" -a "${title}" "$1"
     fi
 }
 
@@ -62,13 +68,13 @@ function alert {
     # check if the command was successful
     if [[ $RVAL == 0 ]]; then
         RVAL="SUCCESS"
-        BG_COLOR="#535d9a"
+        UGL=2
     else
         RVAL="FAILURE"
-        BG_COLOR="#ff2000"
+        UGL=3
     fi
 
-    notify "$LAST" "$RVAL: $DATE"
+    notify "$LAST" $UGL "$RVAL: $DATE"
 }
 
 if [ -n "$WSL_DISTRO_NAME" ]; then
