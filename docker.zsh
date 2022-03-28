@@ -135,3 +135,41 @@ function bud {
             -f /world/${2:Dockerfile} /world \
             && skopeo copy containers-storage:$1 docker-daemon:$1
 }
+
+
+function registry-list-tags {
+    local url=$1
+    local r
+    for r in $(curl -sL -H "authorization: Basic $registry_token" $url/v2/_catalog | yq e '.repositories[]'); do
+        curl -sL -H "authorization: Basic $registry_token" $url/v2/$r/tags/list | yq e '.tags | sort | .[]' | xargs -I tag echo "${r}:tag"
+        echo "<------${r}"
+    done
+}
+
+function registry-clean-tags {
+    local url=$1
+    local img
+    local repo
+    local tag
+    local ref
+    for image in $(cat -); do
+        #[bash]IFS=':' read -ra img <<< "$image"
+        img=("${(@s/:/)image}")
+        repo=${img[1]}
+        tag=${img[2]}
+        ref=$(curl -sL -I -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                   -H "authorization: Basic $registry_token" \
+                   $url/v2/$repo/manifests/$tag \
+           | awk '$1 == "docker-content-digest:" { print $2 }' \
+           | tr -d $'\r')
+        echo ref $ref
+        curl -sL -H "authorization: Basic $registry_token" \
+                 -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                 -X DELETE $url/v2/$repo/manifests/$ref
+        echo DELETE $url/v2/$repo/manifests/$ref
+    done
+
+    echo 'run in registry container:'
+    echo 'registry garbage-collect -m /etc/docker/registry/config.yml'
+}
+
