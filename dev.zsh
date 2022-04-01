@@ -1,9 +1,9 @@
 if (( $+commands[docker] )); then
     #_dx_ctl="docker run -e user=__\$USER:\$UID:\$GID"
-    _dx_ctl="docker run "
+    _dx_ctl="docker run"
 elif (( $+commands[podman] )); then
     # --uidmap 0:\$UID:5000
-    _dx_ctl="podman run "
+    _dx_ctl="podman run"
 fi
 
 usable_port () {
@@ -43,3 +43,26 @@ alias ojpl="ox --name jpl${_dx_id} -p \$(usable_port 8888):8888 io:jpl"
 alias ong="ox --name ng${_dx_id} -v ${_dx_dir}/ng:/srv -p \$(usable_port 8080):80 ${_dx_port} ng"
 alias opg="ox --name pg${_dx_id} -p \$(usable_port 5432):5432 -e POSTGRESS_PASSWORD=123123 -v ${_dx_dir}/pg:/var/lib/postgresql/data ng:pg"
 
+oa () {
+    local target
+    local args=$(getopt -o t: -- "$@")
+    eval set -- "$args"
+    while true; do
+        case "$1" in
+            -t)
+                shift
+                target="$1"
+                ;;
+            --)
+                shift
+                break
+                ;;
+        esac
+        shift
+    done
+    app="${_dx_ctl} --rm -it"
+    name="--name dbg-$target"
+    ns="--uts container:$target --ipc container:$target --pid container:$target --network container:$target"
+    cmd="$app $name $ns -v $PWD:/world ${_dx_clip} ${_dx_debug} ${_dx_proxy} ${_dx_sshkey} $*"
+    eval $cmd
+}

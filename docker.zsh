@@ -139,7 +139,6 @@ function bud {
 
 function registry-list-tags {
     local url=$1
-    local r
     for r in $(curl -sL -H "authorization: Basic $registry_token" $url/v2/_catalog | yq e '.repositories[]'); do
         curl -sL -H "authorization: Basic $registry_token" $url/v2/$r/tags/list | yq e '.tags | sort | .[]' | xargs -I tag echo "${r}:tag"
         echo "<------${r}"
