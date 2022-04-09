@@ -3,6 +3,7 @@ zle -N edit-command-line
 bindkey '\C-o' edit-command-line
 bindkey '^xe' edit-command-line
 bindkey '^x^e' edit-command-line
+bindkey '\C-z' clear-screen
 
 bindkey "\C-q" push-line-or-edit
 bindkey "^[q" quote-line
