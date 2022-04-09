@@ -101,7 +101,7 @@ user-bspc(){
     fi
 }
 zle -N user-bspc
-bindkey "\C-h" user-bspc
+#bindkey "\C-h" user-bspc
 
 user-esc() {
     [[ -z $BUFFER ]] && zle up-history
