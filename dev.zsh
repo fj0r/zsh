@@ -40,7 +40,7 @@ alias ghci="ox --name hs${_dx_id} -v ${_dx_dir}/stack:/opt/stack ${_dx_port} io:
 alias ogo="ox --name go${_dx_id} -v ${_dx_dir}/gopkg:/opt/gopkg ${_dx_port} io:go"
 alias opy="ox --name py${_dx_id} -p \$(usable_port 8888):8888 io:torch"
 alias ojpl="ox --name jpl${_dx_id} -p \$(usable_port 8888):8888 io:jpl"
-alias ong="ox --name ng${_dx_id} -v ${_dx_dir}/ng:/srv -p \$(usable_port 8080):80 ${_dx_port} ng"
+alias ong="ox --name ng${_dx_id} -e INSPECT_REQUEST=1 -v ${_dx_dir}/ng:/srv -p \$(usable_port 8080):80 ${_dx_port} ng"
 alias opg="ox --name pg${_dx_id} -p \$(usable_port 5432):5432 -e POSTGRES_USER=pg -e POSTGRES_PASSWORD=123123 -v ${_dx_dir}/pg:/var/lib/postgresql/data ng:pg"
 
 oa () {
